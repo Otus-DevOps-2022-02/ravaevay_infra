@@ -48,5 +48,5 @@ ravaevay Infra repository
   Команда создания инстанса reddit-app
     yc compute instance create   --name reddit-app   --hostname reddit-app   --memory=4   --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-1604-lts,size=10GB   --network-interface subnet-name=default-ru-central1-a,nat-ip-version=ipv4   --metadata serial-port-enable=1 --metadata-from-file user-data=./startup.yaml
 
-  testapp_IP = 51.250.66.94
+  testapp_IP = 51.250.11.234
   testapp_port = 9292
