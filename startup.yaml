@@ -54,11 +54,12 @@ packages:
   - ruby-full
   - ruby-bundler
   - build-essential
-  - mongodb
+  - mongodb-org
   - git
 
 runcmd:
-  - [ systemctl, enable, mongodb ]
+  - [ systemctl, enable, mongod ]
+  - [systemctl, start, mongod]
   - 'git clone -b monolith https://github.com/express42/reddit.git'
   - [ cd, reddit]
   - [ bundle, install]
