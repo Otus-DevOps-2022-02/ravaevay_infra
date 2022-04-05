@@ -48,5 +48,11 @@ ravaevay Infra repository
   Команда создания инстанса reddit-app
     yc compute instance create   --name reddit-app   --hostname reddit-app   --memory=4   --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-1604-lts,size=10GB   --network-interface subnet-name=default-ru-central1-a,nat-ip-version=ipv4   --metadata serial-port-enable=1 --metadata-from-file user-data=./startup.yaml
 
-  testapp_IP = 51.250.11.234
-  testapp_port = 9292
+
+Задание №5
+  1) Создан файл variables.json.example с параметрами для использования в файле ubuntu16.json и immutable.json
+  2) Cоздан immutable.json для создание bake-образа готового приложения.
+  3) Создан скрипт создания VM из образа reddit-full - /config-scripts/create-reddit-vm.sh
+
+  reddit-app_IP = 51.250.73.227
+  reddit-app_port = 9292

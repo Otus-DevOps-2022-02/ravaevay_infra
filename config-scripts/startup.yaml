@@ -51,11 +51,11 @@ users:
         - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDZnh8KlKzXEY/zUwttpo8KCn5nbeiXHbI5V0HR5c0ricFTL4xNqFyRhFtJTXNOlkV9IvPu5Gnrwt79VWoYJqHyeRl2nhWwmoO8hysuUemguNgox1OCUzRd/UF7Jsu94YlijLKPxF4esnlu54CdtQMG5eqZL7/71MbdEl4yLRmacJkIdy2OdNCu6bltSCh8HLE0tAC9GYVvS2uoxzfH9hw9xti1LON22vFw7JdheEN2xuUUgCb/qViRguJQW1ll3QgAeMtRU6M0lJDdPuEAhLHUL/3Nfdd3d9Ptt4UXYXmTabuVux370WXCFToIVVpviDq3Y7z8d2XUO+JdBJCE+R9L0c2FGq/rawdi5tQLNw4jmLXQlCd+sAcdIlz1ZakD03pRv74kmcD1NZRjr4PeCMm9pWd0QHPjWa3s4g8zSS62uczIc0KmdY4zrqYBwgr1CaKC9vAqrDXAToFS55u6GAb3BjTxeYX+aNbQHroXkhw++FQHnLXdw+bZM7EF0lUSYrs= appuser"
 
 packages:
-  - ruby-full
-  - ruby-bundler
-  - build-essential
-  - mongodb-org
-  - git
+ - ruby-full
+ - ruby-bundler
+ - build-essential
+ - mongodb-org
+ - git
 
 runcmd:
   - [ systemctl, enable, mongod ]
@@ -63,4 +63,3 @@ runcmd:
   - 'git clone -b monolith https://github.com/express42/reddit.git'
   - [ cd, reddit]
   - [ bundle, install]
-  - [puma, -d]
