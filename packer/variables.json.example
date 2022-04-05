@@ -1,9 +1,8 @@
 {
-    "variables": {
       "ID_catalog": "1111111111111",
       "ID_source_image": "ubuntu-1604-lts",
       "SA_PATH": "../key.json",
       "ssh_username": "ubuntu",
       "script_PATH": "script/",
       "subnet_id": "some_id"
-    }
+}
