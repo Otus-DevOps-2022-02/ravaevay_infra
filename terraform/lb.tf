@@ -1,60 +1,78 @@
-terraform {
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-  required_version = ">= 0.13"
-}
-
-provider "yandex" {
-  service_account_key_file = var.service_account_key_file
-  cloud_id                 = var.cloud_id
-  folder_id                = var.folder_id
-  zone                     = var.zone
-}
-
-resource "yandex_lb_target_group" "load_balancer_target_group" {
+resource "yandex_alb_target_group" "load_balancer_target_group" {
   name      = "my-target-group"
-  depends_on = [yandex_compute_instance.app[*]]
+  depends_on = [yandex_compute_instance.app]
 
 
   target {
     subnet_id = var.subnet_id
-    address   = "<внутренний IP-адрес ресурса>"
+    ip_address   = yandex_compute_instance.app[0].network_interface.0.ip_address
   }
 
   target {
     subnet_id = var.subnet_id
-    address   = "<внутренний IP-адрес ресурса 2>"
+    ip_address   = yandex_compute_instance.app[1].network_interface.0.ip_address
   }
 
 }
 
-resource "yandex_alb_load_balancer" "test-balancer" {
-  name        = "my-load-balancer"
+resource "yandex_alb_backend_group" "reddit-backend-group" {
+  name      = "reddit-backend-group"
 
-  network_id  = yandex_vpc_network.test-network.id
+  http_backend {
+    name = "reddit-http-backend"
+    weight = 1
+    port = 9292
+    target_group_ids = ["${yandex_alb_target_group.load_balancer_target_group.id}"]
 
-  allocation_policy {
-    location {
-      zone_id   = "ru-central1-a"
-      subnet_id = yandex_vpc_subnet.test-subnet.id
+    load_balancing_config {
+      panic_threshold = 50
     }
-  }
-
-  listener {
-    name = "my-listener"
-    endpoint {
-      address {
-        external_ipv4_address {
-        }
+    healthcheck {
+      timeout = "1s"
+      interval = "1s"
+      http_healthcheck {
+        path  = "/"
       }
-      ports = [ 8080 ]
     }
-    http {
+    http2 = "true"
+  }
+}
+
+resource "yandex_alb_http_router" "http-router" {
+  name      = "my-http-router"
+  labels = {
+    tf-label    = "reddit-http-router"
+    #empty-label = ""s
+  }
+}
+
+
+
+ resource "yandex_alb_load_balancer" "reddit-load-balancer" {
+   name        = "reddit-load-balancer"
+
+   network_id  = var.network_id
+
+   allocation_policy {
+     location {
+       zone_id   = var.zone
+       subnet_id = var.subnet_id
+     }
+   }
+
+   listener {
+     name = "reddit-listener"
+     endpoint {
+       address {
+         external_ipv4_address {
+         }
+       }
+       ports = [ 9292 ]
+     }
+     http {
       handler {
-        http_router_id = yandex_alb_http_router.test-router.id
+        http_router_id = yandex_alb_http_router.http-router.id
       }
-    }
-  }
+   }
+   }
+   }

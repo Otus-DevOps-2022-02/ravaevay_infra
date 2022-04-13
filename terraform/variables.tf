@@ -20,6 +20,10 @@ variable "image_id" {
   description = "Disk image"
   default     = "fd85hkvj3s2ip81ofabq"
 }
+variable "network_id" {
+  description = "Network ID"
+  default = "enp3rhvqq13h969vdlks"
+}
 variable "subnet_id" {
   description = "Subnet"
   default     = "e9bs9omgumraqpam9o1i"
