@@ -1,6 +1,17 @@
 # ravaevay_infra
 ravaevay Infra repository
 
+Задание №6 - Terraform
+
+Выполнены все задания. Созданы файлы .tf для создания VM с балансировщиком, под приложение Reddit-Monolith
+Частично были сипользованы переменные из terraform.tfvars и variables.tf.
+
+Был использован механизм count для создания n-кол-ва копий инстансов.
+Балансировщик - yandex_lb_network_load_balancer и yandex_lb_target_group
+
+
+
+
 Задание №1 и №2 - Подключение к someinternalhost в одну комманду и подключение коммандой ssh someinternalhost c локальной машины.
   Начнем со второго задания. Для сквозного подключения к внутренней машине someinternalhost через bastion, воспользуемся методом
   SSH std i/o forwarding.
