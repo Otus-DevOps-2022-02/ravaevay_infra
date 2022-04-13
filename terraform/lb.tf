@@ -1,6 +1,6 @@
 resource "yandex_lb_target_group" "load_balancer_tgroup" {
-  name      = "my-target-group"
-  region_id = "ru-central1"
+  name       = "my-target-group"
+  region_id  = "ru-central1"
   depends_on = [yandex_compute_instance.app]
 
 
@@ -21,22 +21,22 @@ resource "yandex_lb_network_load_balancer" "reddit-load-balancer" {
   type = "external"
 
   listener {
-    name = "my-listener"
-    port = "80"
+    name        = "my-listener"
+    port        = "80"
     target_port = "9292"
     external_address_spec {
       ip_version = "ipv4"
     }
   }
 
-   attached_target_group {
-     target_group_id = yandex_lb_target_group.load_balancer_tgroup.id
+  attached_target_group {
+    target_group_id = yandex_lb_target_group.load_balancer_tgroup.id
 
-     healthcheck {
-       name = "tcp"
-       tcp_options {
-         port = 9292
-       }
-     }
-   }
+    healthcheck {
+      name = "tcp"
+      tcp_options {
+        port = 9292
+      }
+    }
+  }
 }

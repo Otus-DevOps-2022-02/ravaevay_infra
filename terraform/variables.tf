@@ -22,7 +22,7 @@ variable "image_id" {
 }
 variable "network_id" {
   description = "Network ID"
-  default = "enp3rhvqq13h969vdlks"
+  default     = "enp3rhvqq13h969vdlks"
 }
 variable "subnet_id" {
   description = "Subnet"
@@ -37,6 +37,6 @@ variable "private_key_path" {
   # default     = "~/.ssh/appuser"
 }
 variable "counter" {
-  type = number
+  type    = number
   default = 1
 }
