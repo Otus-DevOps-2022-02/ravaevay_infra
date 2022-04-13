@@ -1,78 +1,42 @@
-resource "yandex_alb_target_group" "load_balancer_target_group" {
+resource "yandex_lb_target_group" "load_balancer_tgroup" {
   name      = "my-target-group"
+  region_id = "ru-central1"
   depends_on = [yandex_compute_instance.app]
 
 
   target {
     subnet_id = var.subnet_id
-    ip_address   = yandex_compute_instance.app[0].network_interface.0.ip_address
+    address   = yandex_compute_instance.app[0].network_interface.0.ip_address
   }
 
   target {
     subnet_id = var.subnet_id
-    ip_address   = yandex_compute_instance.app[1].network_interface.0.ip_address
+    address   = yandex_compute_instance.app[1].network_interface.0.ip_address
   }
 
 }
 
-resource "yandex_alb_backend_group" "reddit-backend-group" {
-  name      = "reddit-backend-group"
+resource "yandex_lb_network_load_balancer" "reddit-load-balancer" {
+  name = "reddit-load-balancer"
+  type = "external"
 
-  http_backend {
-    name = "reddit-http-backend"
-    weight = 1
-    port = 9292
-    target_group_ids = ["${yandex_alb_target_group.load_balancer_target_group.id}"]
-
-    load_balancing_config {
-      panic_threshold = 50
+  listener {
+    name = "my-listener"
+    port = "80"
+    target_port = "9292"
+    external_address_spec {
+      ip_version = "ipv4"
     }
-    healthcheck {
-      timeout = "1s"
-      interval = "1s"
-      http_healthcheck {
-        path  = "/"
-      }
-    }
-    http2 = "true"
   }
-}
 
-resource "yandex_alb_http_router" "http-router" {
-  name      = "my-http-router"
-  labels = {
-    tf-label    = "reddit-http-router"
-    #empty-label = ""s
-  }
-}
+   attached_target_group {
+     target_group_id = yandex_lb_target_group.load_balancer_tgroup.id
 
-
-
- resource "yandex_alb_load_balancer" "reddit-load-balancer" {
-   name        = "reddit-load-balancer"
-
-   network_id  = var.network_id
-
-   allocation_policy {
-     location {
-       zone_id   = var.zone
-       subnet_id = var.subnet_id
-     }
-   }
-
-   listener {
-     name = "reddit-listener"
-     endpoint {
-       address {
-         external_ipv4_address {
-         }
+     healthcheck {
+       name = "tcp"
+       tcp_options {
+         port = 9292
        }
-       ports = [ 9292 ]
      }
-     http {
-      handler {
-        http_router_id = yandex_alb_http_router.http-router.id
-      }
    }
-   }
-   }
+}
