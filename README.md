@@ -1,6 +1,23 @@
 # ravaevay_infra
 ravaevay Infra repository
 
+Задание №7 - Terraform-2
+
+Созданы файлы app.json db.json для создания образов.
+Поработал с модулями. Выделил два модуля для создания инстанса с приложением и инстанса с бд.
+Вынес .tfstate файл в s3, поработал с Terraform из разных директорий. Посмотрел на работу блокировок.
+Вынес ip адрес db инстанса в переменную и передал в модуль app.
+
+database_url     = module.db.external_ip_address_db
+
+Пробовал передать в переменную окружения DATABASE_URL, но видимо что-то не так делаю) Сервис упорно не видит эту переменную)
+
+provisioner "remote-exec" {
+    inline = [
+     "export DATABASE_URL=mongod://${var.database_url}:27017"
+
+     ]
+
 Задание №6 - Terraform
 
 Выполнены все задания. Созданы файлы .tf для создания VM с балансировщиком, под приложение Reddit-Monolith
