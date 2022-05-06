@@ -42,28 +42,28 @@ resource "yandex_compute_instance" "app" {
     # путь до приватного ключа
     private_key = file(var.private_key_path)
   }
-  provisioner "remote-exec" {
-    inline = [
-     "export DATABASE_URL=mongod://${var.database_url}:27017"
+  # provisioner "remote-exec" {
+  #   inline = [
+  #    "export DATABASE_URL=mongod://${var.database_url}:27017"
 
-     ]
-  }
-  provisioner "file" {
-    source      = "files/puma.service"
-    destination = "/tmp/puma.service"
-  }
+  #    ]
+  # }
+  # provisioner "file" {
+  #   source      = "files/puma.service"
+  #   destination = "/tmp/puma.service"
+  # }
 
-  provisioner "file" {
-    source      = "files/deploy.sh"
-    destination = "/tmp/deploy.sh"
-  }
+  # provisioner "file" {
+  #   source      = "files/deploy.sh"
+  #   destination = "/tmp/deploy.sh"
+  # }
 
-  provisioner "remote-exec" {
-    script = "files/deploy.sh"
-    #inline = [
-    # "sudo chmod +x /tmp/deploy.sh",
-    #   "sudo /tmp/deploy.sh",
-    # ]
-  }
+  # provisioner "remote-exec" {
+  #   script = "files/deploy.sh"
+  #   #inline = [
+  #   # "sudo chmod +x /tmp/deploy.sh",
+  #   #   "sudo /tmp/deploy.sh",
+  #   # ]
+  # }
 
 }
