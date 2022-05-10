@@ -1,0 +1,31 @@
+- name: Configure MongoDB
+  hosts: all
+  become: true
+  tasks:
+  - name: Add an Apt signing key, uses whichever key is at the URL
+    ansible.builtin.apt_key:
+      url: https://www.mongodb.org/static/pgp/server-4.2.asc
+      state: present
+
+  - name: Add specified repository into sources list
+    ansible.builtin.apt_repository:
+      repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse
+      state: present
+
+  - name: Install a list of packages
+    apt:
+      pkg:
+      - apt-transport-https
+      - ca-certificates
+      - mongodb-org
+      update_cache: yes
+
+  - name: Enable service mongod
+    systemd:
+      name: mongod
+      enabled: yes
+
+  - name: Start mongod
+    systemd:
+      name: mongod
+      state: started
