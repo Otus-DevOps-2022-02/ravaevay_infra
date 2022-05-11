@@ -1,0 +1,4 @@
+---
+# vars file for app
+vars:
+    db_host: 10.128.0.27 # <-- подставьте сюда ваш IP
