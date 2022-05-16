@@ -18,3 +18,12 @@
   - name: enable puma
     become: true
     systemd: name=puma enabled=yes
+
+  #- name: Open HTTP port
+  #  community.general.ufw:
+  #    rule: allow
+   #   name: OpenSSH
+
+  - name: Show info about the env this host belongs to
+    debug:
+      msg: "This host is in {{ env }} environment!!!"
