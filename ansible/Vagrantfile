@@ -1,0 +1,76 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure('2') do |config|
+  #config.vm.provider :vmware_esxi
+  #config.vm.box = 'generic/ubuntu2104'
+  config.vm.provider :vmware_esxi do |esxi|
+    esxi.esxi_hostname = '192.168.224.83'
+    esxi.esxi_username = 'root'
+    esxi.esxi_password = 'ntktge3br!'
+    esxi.esxi_virtual_network = 'Vlan_223'
+       #  OPTIONAL.  Specify a Disk Store
+    esxi.esxi_disk_store = 'MSA2000G3-DEV1'
+        #esxi.guest_name = 'dbserver'
+    #  OPTIONAL.  Set the guest username login.  The default is 'vagrant'.
+    #esxi.guest_username = 'vagrant'
+    esxi.guest_memsize = '2048'
+    esxi.guest_numvcpus = '2'
+    esxi.guest_disk_type = 'thin'
+    esxi.guest_guestos = 'ubuntu-64'
+    esxi.guest_virtualhw_version = '11'
+   # esxi.guest_name = 'dbserver'
+  end
+
+  config.vm.define "dbserver" do |db|
+    #db.vm.box = 'generic/ubuntu2104'
+    db.vm.box = 'generic/ubuntu1604'
+    db.vm.box_version = "1.1.0"
+    db.vm.hostname = 'dbserver'
+    db.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/site.yml"
+      ansible.groups = {
+      "db" => ["dbserver"],
+      "db:vars" => {"mongo_bind_ip" => "0.0.0.0"}
+      }
+    end
+
+     # config.vm.hostname = 'dbserver'
+  end
+
+  config.vm.define "appserver" do |app|
+   # app.vm.box = 'generic/ubuntu2104'
+    app.vm.box = 'generic/ubuntu1604'
+    app.vm.box_version = "1.1.0"
+    app.vm.hostname = 'appserver'
+    app.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/site.yml"
+      ansible.groups = {
+      "app" => ["appserver"],
+      "app.vars" => {"db_host" =>"192.168.223.205"}
+      }
+      ansible.extra_vars = {
+        "deploy_user" => "vagrant",
+        "nginx_sites" => {
+          "default" => [
+            "listen 80",
+            "server_name 'reddit'",
+             "location / { proxy_pass http://127.0.0.1:9292; }"
+           ]
+        }
+      }
+    end
+  #  app.guest_name = 'appserver'
+    #  OPTIONAL.  Set the guest username login.  The default is 'vagrant'.
+    #esxi.guest_username = 'vagrant'
+  #  app.guest_memsize = '2048'
+  #  app.guest_numvcpus = '2'
+  #  app.guest_disk_type = 'thin'
+  #  app.guest_guestos = 'ubuntu-64'
+  #  app.guest_virtualhw_version = '11'
+  end
+end
