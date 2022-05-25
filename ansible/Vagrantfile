@@ -11,7 +11,7 @@ Vagrant.configure('2') do |config|
   config.vm.provider :vmware_esxi do |esxi|
     esxi.esxi_hostname = '192.168.224.83'
     esxi.esxi_username = 'root'
-    esxi.esxi_password = 'ntktge3br!'
+    esxi.esxi_password = 'some_password'
     esxi.esxi_virtual_network = 'Vlan_223'
        #  OPTIONAL.  Specify a Disk Store
     esxi.esxi_disk_store = 'MSA2000G3-DEV1'
