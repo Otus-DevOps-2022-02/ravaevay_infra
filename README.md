@@ -1,6 +1,13 @@
 # ravaevay_infra
 ravaevay Infra repository
 
+Задание №11
+
+ - Установлен Vagrant и провайдер vmware_esxi (поскольку задания выполняются на VM и хотелось попробовать провайдера более приближенного к прод среде). Обкатан процесс создания VM и применнения сценариев ansible. В конфигурацию Vagrantfile добавлена extar_vars для настройки Nginx на 80 порту.
+ - Протестирована связка Molecule c провайдером vmware:
+      molecule init -r db -d vmware default
+
+
 Задание №10
 
 - Изменена структура каталога ansible. Добавлены каталоги roles, playbooks. Файлы разнесены по каталогам.
